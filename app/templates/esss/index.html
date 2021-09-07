@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static  'app/css/styles.css' %}">
+
+</head>
+
+<body>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <script src="{% static 'app/css/myscripts.js' %}"></script>
+
+
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-lg-12">
+                <div class="card chat-app">
+                    <div id="plist" class="people-list">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-search"></i></span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="Search...">
+                        </div>
+                        <p>All user details</p>
+                        <ul class="list-unstyled chat-list mt-2 mb-0">
+                            {% for i in user3 %}
+                            <li class="clearfix active">
+
+                                <div class="about">
+                                    <div class="name">
+                                        <a href="/{{i.username}}"
+                                        >{{i.username}}</a></div>
+                                    <div class="status"> <i class="fa fa-circle online"></i> {{i.status}} </div>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="chat">
+                        <div class="chat-header clearfix">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar">
+                                    </a>
+                                    <div class="chat-about">
+                                        <h6 class="m-b-0">{{user1}}</h6>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="chat-history">
+                            <ul class="m-b-0">
+                                <li class="clearfix">
+
+                                </li>
+                            </ul>
+                        </div>
+                                            <div class="chat-message clearfix">
+                            <div class="input-group mb-0">
+                                <div class="input-group-prepend">
+                                    <p id="send2">Send Image </p>
+                                    <div class="preview-img_footer_addfile"></div>
+                        <input type="file"  id="image" placeholder="send image">
+                                    <input id="chat-message-submit" type="button" value="send"
+                                        class="input-group-text"></input>
+                                </div>
+                                <input id="chat-message-input" type="text" class="form-control"
+                                    placeholder="Enter text here...">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input id="current_id" type="hidden" value="{{current_user_id}}">
+
+        </div>
+    </div>
+    {{ room_name|json_script:"room-name" }}
+
+    <script>
+        const username = JSON.parse(document.getElementById('room-name').textContent);
+        const url = 'ws://127.0.0.1:8000/ws' + window.location.pathname;
+        console.log(url);
+        const chatSocket = new WebSocket(
+            url
+        );
+        chatSocket.onmessage = function (e) {
+            const name = document.querySelector('#current_id');
+            console.log(name.value)
+            var id2 = name.value;
+            const data = JSON.parse(e.data);
+            var id = data.id
+            var id3=data.recerid
+            if (id3 == id) {
+            if(data.image){
+            var today = new Date();
+
+            var time = today.getHours() + ":" + today.getMinutes()
+            var dateTime = time;
+                    var div = document.querySelector("div.chat-history")
+                    var div2=(div.children[0].children[0])
+                    console.log(div2)
+                    var ele =document.createElement('div')
+                    ele.className="float-left"
+                    var element =document.createElement('p')
+                    var ele1 =document.createElement('div')
+                    ele1.className="float-left"
+                    var el=document.createElement('img')
+                    el.height = "300";
+                    el.src= `http://127.0.0.1:8000/media/image/image.jpg`
+                    var y=document.createTextNode(`${data.message}`)
+                   var time=document.createTextNode(`Time:${dateTime}`)
+                    element.appendChild(y)
+                    element.appendChild(time)
+                    ele.appendChild(element)
+                    ele1.appendChild(el)
+                    console.log(ele)
+                    div2.appendChild(ele)
+                     div2.appendChild(ele1)
+                      var image1=document.getElementById("image").value;
+                     image1.value=null
+            }
+            else{
+            var today = new Date();
+
+var time = today.getHours() + ":" + today.getMinutes()
+var dateTime = time
+            console.log(data.image)
+                    var div = document.querySelector("div.chat-history")
+                    var div2=(div.children[0].children[0])
+                    console.log(div2)
+                    var ele =document.createElement('div')
+                    ele.className="float-left"
+                    var element =document.createElement('p')
+                    var y=document.createTextNode(`${data.message}`)
+                    var element1 =document.createElement('div')
+                    var elet1 =document.createElement('p')
+                    var time=document.createTextNode(`Time:${dateTime}`)
+
+                    element.appendChild(y)
+                       elet1.appendChild(time)
+
+                    element.appendChild(time)
+                    ele.appendChild(element)
+                    console.log(ele)
+                    div2.appendChild(ele)
+
+            }
+            }
+            else {
+            if(data.image){
+            var today = new Date();
+
+            var time = today.getHours() + ":" + today.getMinutes()
+            var dateTime = time;
+                    var div = document.querySelector("div.chat-history")
+                    var div2=(div.children[0].children[0])
+                    console.log(div2)
+                    var ele =document.createElement('div')
+                    ele.className="float-right"
+                    var element =document.createElement('p')
+                    var ele1 =document.createElement('div')
+                    ele1.className="float-right"
+                    var el=document.createElement('img')
+                    el.height = "300";
+                    el.src= `http://127.0.0.1:8000/media/image/image.jpg`
+                    var y=document.createTextNode(`${data.message}`)
+                   var time=document.createTextNode(`Time:${dateTime}`)
+                    element.appendChild(y)
+                    element.appendChild(time)
+                    ele.appendChild(element)
+                    ele1.appendChild(el)
+                    console.log(ele)
+                    div2.appendChild(ele)
+                     div2.appendChild(ele1)
+                      var image1=document.getElementById("image").value;
+                     image1.value=null
+            }
+
+
+            else{
+            var today = new Date();
+
+            var time = today.getHours() + ":" + today.getMinutes()
+            var dateTime =time;
+            var div = document.querySelector("div.chat-history")
+                    var div2=(div.children[0].children[0])
+                    console.log(div2)
+                    var ele =document.createElement('div')
+                    ele.className="float-right"
+                    var element =document.createElement('p')
+                    var y=document.createTextNode(`${data.message}`)
+                    var element1 =document.createElement('div')
+                    var elet1 =document.createElement('p')
+                    var time=document.createTextNode(`Time:${dateTime}`)
+                    element.appendChild(y)
+                    elet1.appendChild(time)
+
+                    ele.appendChild(element)
+                    element1.appendChild(elet1)
+
+                    console.log(ele)
+                    div2.appendChild(ele)
+                    div2.appendChildren(element1)
+                    }
+
+
+
+            }
+        };
+        chatSocket.onclose = function (e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function (e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+        document.querySelector('#chat-message-submit').onclick = function (e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            var image=document.getElementById("image").value;
+            const name = document.querySelector('#current_id');
+            const message = messageInputDom.value;
+            var id1 = name.value;
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'id': id1,
+                'image':image
+
+            }));
+            messageInputDom.value = '';
+        };
+    </script>
+
+
+</body>
+
+</html>
